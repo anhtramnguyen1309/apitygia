@@ -1,5 +1,8 @@
 import asyncio
 from playwright.async_api import async_playwright
+from fastapi import FastAPI
+
+app = FastAPI()
 
 from tcg import (
     get_naver_rate, get_e9pay_rate, get_sentbe_rate,
