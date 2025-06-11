@@ -19,6 +19,9 @@ def get_cached_rates():
     return cache or {"message": "Dữ liệu chưa sẵn sàng"}
 
 async def update_cache():
+    async with async_playwright() as p:
+      browser = await p.chromium.launch(headless=True)
+
     while True:
         print("🔄 Đang cập nhật tỷ giá...")
         try:
@@ -57,4 +60,4 @@ async def on_startup():
     asyncio.create_task(update_cache())
 
 if __name__ == "__main__":
-    uvicorn.run("api_server:app", host="0.0.0.0", port=8000, reload=True)  
+    uvicorn.run("api:app", host="0.0.0.0", port=8001, reload=True)  
