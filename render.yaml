@@ -1,6 +1,7 @@
 services:
   - type: web
-    name: apitygia
-    runtime: python
-    buildCommand: pip install -r requirements.txt && python -m playwright install --with-deps
-    startCommand: uvicorn api:app --host 0.0.0.0 --port 8001
+    name: api-tygia
+    env: python
+    plan: free
+    buildCommand: "./build.sh"
+    startCommand: uvicorn api:app --host 0.0.0.0 --port $PORT
