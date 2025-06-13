@@ -19,16 +19,14 @@ def get_cached_rates():
     return cache or {"message": "Dữ liệu chưa sẵn sàng"}
 
 async def update_cache():
-    async with async_playwright() as p:
-      browser = await p.chromium.launch(headless=True)
-
-    while True:
-        print("🔄 Đang cập nhật tỷ giá...")
-        try:
-            async with async_playwright() as p:
+    print("🔁 Bắt đầu chạy update_cache()...")
+    try:
+        async with async_playwright() as p:
+            while True:
+                print("🔄 Đang cập nhật tỷ giá...")
                 browser = await p.chromium.launch(headless=True)
                 pages = [await browser.new_page() for _ in range(10)]
-                
+
                 results = await asyncio.gather(
                     get_naver_rate(pages[0]),
                     get_e9pay_rate(pages[1]),
@@ -43,19 +41,15 @@ async def update_cache():
                 )
                 await browser.close()
 
-                labels = ["Naver", "E9Pay", "Sentbe", "Gmoney", "Coinshot", 
+                labels = ["Naver", "E9Pay", "Sentbe", "Gmoney", "Coinshot",
                           "Hanpass", "Cross", "JRF", "GME", "UTransfer"]
 
                 global cache
                 cache = dict(zip(labels, results))
-                print("✅ Đã cập nhật cache.")
+                print("✅ Đã cập nhật cache:")
+                print(cache)
 
-        except Exception as e:
-            print("❌ Lỗi khi cập nhật cache:", e)
+                await asyncio.sleep(60)  # cập nhật mỗi phút
 
-        await asyncio.sleep(50)  # Cập nhật mỗi phút
-
-@app.on_event("startup")
-async def on_startup():
-    asyncio.create_task(update_cache())
-
+    except Exception as e:
+        print("❌ Lỗi khi chạy update_cache:", e)
