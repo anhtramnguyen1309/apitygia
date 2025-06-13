@@ -1,7 +1,17 @@
 services:
   - type: web
+<<<<<<< HEAD
     name: api-tygia
     env: python
     plan: free
     buildCommand: "./build.sh"
     startCommand: uvicorn api:app --host 0.0.0.0 --port $PORT
+=======
+    name: apitygia
+    runtime: python
+    buildCommand: |
+      pip install --upgrade pip
+      pip install -r requirements.txt
+      playwright install --with-deps
+    startCommand: uvicorn apitygia:app --host 0.0.0.0 --port $PORT
+>>>>>>> 1e9f9eabea36e45dc74dde48bd647c63959dc47c
