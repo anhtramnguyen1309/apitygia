@@ -53,3 +53,6 @@ async def update_cache():
 
     except Exception as e:
         print("❌ Lỗi khi chạy update_cache:", e)
+@app.on_event("startup")
+async def on_startup():
+    asyncio.create_task(update_cache())
