@@ -1,8 +1,9 @@
 services:
   - type: web
-<<<<<<< HEAD
-    name: api-tygia
+    name: apitygia
     env: python
     plan: free
-    buildCommand: "./build.sh"
+    buildCommand: |
+      pip install -r requirements.txt
+      python -m playwright install chromium
     startCommand: uvicorn api:app --host 0.0.0.0 --port $PORT
