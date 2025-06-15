@@ -187,7 +187,7 @@ import asyncio
 
 async def get_jrf_rate(page):
     try:
-        await page.goto("https://www.jpremit.co.kr/", timeout=180000)
+        await page.goto("https://www.jpremit.co.kr/", timeout=90000
         await page.wait_for_timeout(1500)
 
         html = await page.content()

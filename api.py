@@ -20,36 +20,62 @@ def get_cached_rates():
 
 async def update_cache():
     print("🔁 Bắt đầu chạy update_cache()...")
+
     try:
         async with async_playwright() as p:
             while True:
                 print("🔄 Đang cập nhật tỷ giá...")
-                browser = await p.chromium.launch(headless=True)
-                pages = [await browser.new_page() for _ in range(10)]
 
-                results = await asyncio.gather(
-                    get_naver_rate(pages[0]),
-                    get_e9pay_rate(pages[1]),
-                    get_sentbe_rate(pages[2]),
-                    get_gmoney_rate(pages[3]),
-                    get_coinshot_rate(pages[4]),
-                    get_hanpass_rate(pages[5]),
-                    get_cross_rate(pages[6]),
-                    get_jrf_rate(pages[7]),
-                    get_gme_rate(pages[8]),
-                    get_utransfer_rate(pages[9]),
+                browser = await p.chromium.launch(headless=True, args=["--disable-dev-shm-usage"])
+
+                # Nhóm 1
+                page1 = await browser.new_page()
+                page2 = await browser.new_page()
+                page3 = await browser.new_page()
+                result1 = await asyncio.gather(
+                    get_naver_rate(page1),
+                    get_e9pay_rate(page2),
+                    get_sentbe_rate(page3),
                 )
+
+                # Nhóm 2
+                page4 = await browser.new_page()
+                page5 = await browser.new_page()
+                page6 = await browser.new_page()
+                result2 = await asyncio.gather(
+                    get_gmoney_rate(page4),
+                    get_coinshot_rate(page5),
+                    get_hanpass_rate(page6),
+                )
+
+                # Nhóm 3
+                page7 = await browser.new_page()
+                page8 = await browser.new_page()
+                page9 = await browser.new_page()
+                page10 = await browser.new_page()
+                result3 = await asyncio.gather(
+                    get_cross_rate(page7),
+                    get_jrf_rate(page8),
+                    get_gme_rate(page9),
+                    get_utransfer_rate(page10),
+                )
+
                 await browser.close()
 
-                labels = ["Naver", "E9Pay", "Sentbe", "Gmoney", "Coinshot",
-                          "Hanpass", "Cross", "JRF", "GME", "UTransfer"]
+                # Gộp lại kết quả
+                labels = ["Naver", "E9Pay", "Sentbe",
+                          "Gmoney", "Coinshot", "Hanpass",
+                          "Cross", "JRF", "GME", "UTransfer"]
+
+                results = result1 + result2 + result3
 
                 global cache
                 cache = dict(zip(labels, results))
                 print("✅ Đã cập nhật cache:")
                 print(cache)
 
-                await asyncio.sleep(60)  # cập nhật mỗi phút
+                await asyncio.sleep(300)
+
 
     except Exception as e:
         print("❌ Lỗi khi chạy update_cache:", e)
