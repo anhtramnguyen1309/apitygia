@@ -2,7 +2,7 @@ services:
   - type: web
     name: apitygia
     env: python
-    plan: free
+    plan: 7$
     buildCommand: |
         pip install -r requirements.txt
         python -m playwright install chromium
