@@ -74,7 +74,7 @@ async def update_cache():
                 print("✅ Đã cập nhật cache:")
                 print(cache)
 
-                await asyncio.sleep(300)
+                await asyncio.sleep(200)
 
 
     except Exception as e:
